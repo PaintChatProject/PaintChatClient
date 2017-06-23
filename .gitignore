@@ -28,4 +28,5 @@ hs_err_pid*
 *.iws
 *.ipr
 modules.xml
+workspace.xml
 .idea/misc.xml
