@@ -1,15 +1,15 @@
 import java.io.*;
-import java.net.ConnectException;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.Scanner;
 
 class ClientSendThread extends Thread{
     Socket socket;
+    String name;
 
     public ClientSendThread(Socket socket){
         this.socket=socket;
     }
+
 
     public void run(){
 
@@ -18,8 +18,11 @@ class ClientSendThread extends Thread{
 
             ObjectOutputStream objectOutputStream=new ObjectOutputStream(socket.getOutputStream()); //Object 를 출력할 스트림 생성 //출력스트림 생성
 
-            while(true){
-                ChatData chatData=new ChatData(scanner.nextLine()); //스케너로 입력데이터 받아 chatData에  넣음
+            System.out.print("대화명을 입력해주세요:");
+            name=scanner.nextLine();
+            objectOutputStream.writeObject(name);//대화명 보내기기
+           while(true){
+                ChatData chatData=new ChatData("["+name+"]"+scanner.nextLine()); //스케너로 입력데이터 받아 chatData에  넣음
 
                 objectOutputStream.writeObject(chatData);  // ChatData Object 전송
 
@@ -28,11 +31,7 @@ class ClientSendThread extends Thread{
             objectOutputStream.close();
             socket.close(); //소켓 종료
 
-        } catch (ConnectException ce) {
-            ce.printStackTrace();
-        } catch (IOException ie) {
-            ie.printStackTrace();
-        } catch (Exception e) {
+        }catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -66,11 +65,7 @@ class ClientReceiveThread extends Thread{
             objectInputStream.close();
             socket.close(); //소켓 종료
 
-        } catch (ConnectException ce) {
-            ce.printStackTrace();
-        } catch (IOException ie) {
-            ie.printStackTrace();
-        } catch (Exception e) {
+        }catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -91,10 +86,8 @@ public class PaintChatClient {
             //서버에 데이터를 보내는 스레드 실행
             new ClientSendThread(socket).start();
 
-        }catch(UnknownHostException ue){
-            ue.printStackTrace();
-        }catch(IOException ie){
-            ie.printStackTrace();
+        }catch(Exception e){
+            e.printStackTrace();
         }
 
     }
