@@ -80,7 +80,7 @@ class ClientReceiveThread extends Thread{
 }
 
 public class PaintChatClient {
-    public static final String SERVER_IP = "192.168.0.105"; //접속할 서버 아이피
+    public static final String SERVER_IP = "127.0.0.1"; //접속할 서버 아이피
     public static final int SERVER_PORT = 7777; //접속할 서버 포트
 
     public static void main(String args[]) {
