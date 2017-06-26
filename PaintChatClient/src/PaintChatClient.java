@@ -1,15 +1,16 @@
+import java.awt.*;
 import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 
 class ClientSendThread extends Thread{
     Socket socket;
-    String name;
+    static String name = "";
+    static String temp = "";
 
     public ClientSendThread(Socket socket){
         this.socket=socket;
     }
-
 
     public void run(){
 
@@ -20,13 +21,16 @@ class ClientSendThread extends Thread{
 
             System.out.print("대화명을 입력해주세요:");
             name=scanner.nextLine();
+            //notify();
+
             objectOutputStream.writeObject(name);//대화명 보내기기
            while(true){
-                ChatData chatData=new ChatData("["+name+"]"+scanner.nextLine()); //스케너로 입력데이터 받아 chatData에  넣음
+                temp = scanner.nextLine();
+                ChatData chatData=new ChatData("["+name+"]"+ temp); //스케너로 입력데이터 받아 chatData에  넣음
 
                 objectOutputStream.writeObject(chatData);  // ChatData Object 전송
 
-                if(chatData.text=="/exit") break;
+                if(temp.equals("/exit")) break;
             }
             objectOutputStream.close();
             socket.close(); //소켓 종료
@@ -38,7 +42,9 @@ class ClientSendThread extends Thread{
 }
 
 class ClientReceiveThread extends Thread{
+    //ClientReceiveThread temp = new ClientReceiveThread();
     Socket socket;
+
 
     public ClientReceiveThread(Socket socket){
         this.socket=socket;
@@ -47,8 +53,10 @@ class ClientReceiveThread extends Thread{
     public void run(){
         try {
             ObjectInputStream objectInputStream=new ObjectInputStream(socket.getInputStream()); //Object 입력 스트림 생성   //입력스트림 생성
+            //temp.wait();
 
             while(true){
+                if(ClientSendThread.temp.equals("/exit")) break;
                 Object object=objectInputStream.readObject();   //입력스트림으로 부터 데이터 수신
 
                 // instanceof 연산자를 이용하여 데이터 구분 후 처리
@@ -72,7 +80,7 @@ class ClientReceiveThread extends Thread{
 }
 
 public class PaintChatClient {
-    public static final String SERVER_IP = "127.0.0.1"; //접속할 서버 아이피
+    public static final String SERVER_IP = "192.168.0.105"; //접속할 서버 아이피
     public static final int SERVER_PORT = 7777; //접속할 서버 포트
 
     public static void main(String args[]) {
@@ -85,6 +93,8 @@ public class PaintChatClient {
 
             //서버에 데이터를 보내는 스레드 실행
             new ClientSendThread(socket).start();
+
+
 
         }catch(Exception e){
             e.printStackTrace();
