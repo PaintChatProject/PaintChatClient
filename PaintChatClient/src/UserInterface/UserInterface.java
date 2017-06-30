@@ -43,6 +43,32 @@ public class UserInterface extends JFrame {
         String[] str = { "10", "15", "20", "25", "30" };
         jcb = new JComboBox(str);
 
+        jcb.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String s = (String)jcb.getSelectedItem();
+
+                switch (s) {
+                    case "10":
+                        paintCanvas.setSize(10);
+                        break;
+                    case "15":
+                        paintCanvas.setSize(15);
+                        break;
+                    case "20":
+                        paintCanvas.setSize(20);
+                        break;
+                    case "25":
+                        paintCanvas.setSize(25);
+                        break;
+                    case "30":
+                        paintCanvas.setSize(30);
+                        break;
+                }
+            }
+        });
+        jcb.setSelectedItem(str[0]);
+
         colorPanel.add(jcb);
 
         paintPanel=new JPanel(new BorderLayout());
