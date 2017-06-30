@@ -12,6 +12,7 @@ public class UserInterface extends JFrame {
     JButton[] colorBtn=new JButton[6];
     String[] colorBtnText={"red","orange","yellow","green","blue","pink"};
     Color[] color={Color.red,Color.orange,Color.yellow,Color.green,Color.blue,Color.pink};
+    JButton eraser, clear;
 
     PaintCanvas paintCanvas;
     JComboBox jcb;
@@ -36,9 +37,29 @@ public class UserInterface extends JFrame {
                     paintCanvas.setC(indexColor);
                 }
             });
+            colorBtn[i].setOpaque(true);
             colorBtn[i].setBackground(color[i]);
             colorPanel.add(colorBtn[i]);
         }
+
+        eraser = new JButton("지우개");
+        eraser.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                paintCanvas.setC(paintCanvas.getBackground());
+            }
+        });
+        colorPanel.add(eraser);
+
+        clear = new JButton("Clear");
+        clear.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Graphics g = paintCanvas.getGraphics();
+                g.clearRect(0,0,paintCanvas.getWidth(),paintCanvas.getHeight());
+            }
+        });
+        colorPanel.add(clear);
 
         String[] str = { "10", "15", "20", "25", "30" };
         jcb = new JComboBox(str);
@@ -68,7 +89,6 @@ public class UserInterface extends JFrame {
             }
         });
         jcb.setSelectedItem(str[0]);
-
         colorPanel.add(jcb);
 
         paintPanel=new JPanel(new BorderLayout());
