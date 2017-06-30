@@ -9,10 +9,10 @@ public class UserInterface extends JFrame {
     JPanel paintPanel;
     JPanel colorPanel;
 
-    JButton[] colorBtn=new JButton[6];
+    JButton[] colorBtn=new JButton[7];
     String[] colorBtnText={"red","orange","yellow","green","blue","pink"};
     Color[] color={Color.red,Color.orange,Color.yellow,Color.green,Color.blue,Color.pink};
-    JButton eraser, clear;
+    JButton eraser, clear, fillColor;
 
     PaintCanvas paintCanvas;
     JComboBox jcb;
@@ -28,13 +28,14 @@ public class UserInterface extends JFrame {
     public UserInterface(){
         paintCanvas=new PaintCanvas();
         colorPanel = new JPanel(new FlowLayout());
-        for(int i=0; i<6; i++){
+        for(int i=0; i<color.length; i++){
             colorBtn[i]=new JButton(colorBtnText[i]);
             Color indexColor = color[i];
             colorBtn[i].addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     paintCanvas.setC(indexColor);
+                    fillColor.setBackground(indexColor);
                 }
             });
             colorBtn[i].setOpaque(true);
@@ -60,6 +61,17 @@ public class UserInterface extends JFrame {
             }
         });
         colorPanel.add(clear);
+
+        fillColor = new JButton("FillColor");
+        fillColor.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Graphics g = paintCanvas.getGraphics();
+                g.setColor(paintCanvas.getC());
+                g.fillRect(0,0,paintCanvas.getWidth(),paintCanvas.getHeight());
+            }
+        });
+        colorPanel.add(fillColor);
 
         String[] str = { "10", "15", "20", "25", "30" };
         jcb = new JComboBox(str);
@@ -137,8 +149,8 @@ public class UserInterface extends JFrame {
         paintCanvas.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
-                paintCanvas.setX(e.getX() - 15);
-                paintCanvas.setY(e.getY() - 15);
+                paintCanvas.setX(e.getX() - paintCanvas.getSiz()/2);
+                paintCanvas.setY(e.getY() - paintCanvas.getSiz()/2);
                 paintCanvas.repaint();
             }
         });
