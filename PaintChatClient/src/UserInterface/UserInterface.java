@@ -68,24 +68,7 @@ public class UserInterface extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String s = (String)jcb.getSelectedItem();
-
-                switch (s) {
-                    case "10":
-                        paintCanvas.setSize(10);
-                        break;
-                    case "15":
-                        paintCanvas.setSize(15);
-                        break;
-                    case "20":
-                        paintCanvas.setSize(20);
-                        break;
-                    case "25":
-                        paintCanvas.setSize(25);
-                        break;
-                    case "30":
-                        paintCanvas.setSize(30);
-                        break;
-                }
+                paintCanvas.setSize(Integer.parseInt(s));
             }
         });
         jcb.setSelectedItem(str[0]);
