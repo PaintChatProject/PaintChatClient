@@ -29,6 +29,13 @@ public class UserInterface extends JFrame {
         colorPanel = new JPanel(new FlowLayout());
         for(int i=0; i<6; i++){
             colorBtn[i]=new JButton(colorBtnText[i]);
+            Color indexColor = color[i];
+            colorBtn[i].addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    paintCanvas.setC(indexColor);
+                }
+            });
             colorBtn[i].setBackground(color[i]);
             colorPanel.add(colorBtn[i]);
         }
