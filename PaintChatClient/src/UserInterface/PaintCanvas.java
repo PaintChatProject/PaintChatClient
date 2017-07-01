@@ -48,4 +48,22 @@ public class PaintCanvas extends Canvas {
     public void setY(int y) {
         this.y = y;
     }
+
+    public void addPaint(PaintData paintData){
+        setX(paintData.getX());
+        setY(paintData.getY());
+        setC(paintData.getColor());
+        setSize(paintData.getSize());
+        repaint();
+    }
+
+    public void setBackgroundColor(Color color){
+        Graphics g = getGraphics();
+        g.setColor(color);
+        g.fillRect(0, 0, getWidth(), getHeight());
+    }
+
+    public void setBackgroundImage(String path){
+
+    }
 }

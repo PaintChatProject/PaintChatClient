@@ -62,11 +62,11 @@ class ClientReceiveThread extends Thread{
                 // instanceof 연산자를 이용하여 데이터 구분 후 처리
                 if(object instanceof PaintData){
                     PaintData paintData=(PaintData)object;
-                    System.out.println(paintData.x+" "+paintData.y+" "+paintData.w);
+                    System.out.println(paintData.getX()+" "+paintData.getY());
                 }
                 else if(object instanceof ChatData){
                     ChatData textData=(ChatData)object;
-                    System.out.println(textData.text);
+                    System.out.println(textData.getMessage());
                 }
                 if(object==null) break;
             }

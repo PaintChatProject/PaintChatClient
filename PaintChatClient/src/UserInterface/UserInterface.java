@@ -74,9 +74,7 @@ public class UserInterface extends JFrame {
         fillColor.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Graphics g = paintCanvas.getGraphics();
-                g.setColor(paintCanvas.getC());
-                g.fillRect(0, 0, paintCanvas.getWidth(), paintCanvas.getHeight());
+                paintCanvas.setBackgroundColor(paintCanvas.getC());
             }
         });
         colorPanel.add(fillColor);
@@ -167,9 +165,8 @@ public class UserInterface extends JFrame {
         paintCanvas.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
-                paintCanvas.setX(e.getX() - paintCanvas.getSiz() / 2);
-                paintCanvas.setY(e.getY() - paintCanvas.getSiz() / 2);
-                paintCanvas.repaint();
+                PaintData paintData=new PaintData(e.getX() - paintCanvas.getSiz() / 2,e.getY() - paintCanvas.getSiz() / 2,paintCanvas.getC(),paintCanvas.getSiz());
+                paintCanvas.addPaint(paintData);
             }
         });
     }
