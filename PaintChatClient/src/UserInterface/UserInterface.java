@@ -32,7 +32,7 @@ public class UserInterface extends JFrame {
         return userInterface;
     }
 
-    public UserInterface() {
+    private UserInterface() {
         paintCanvas = new PaintCanvas();
         colorPanel = new JPanel(new FlowLayout());
         for (int i = 0; i < color.length; i++) {

@@ -84,7 +84,7 @@ public class PaintChatClient {
     public static final int SERVER_PORT = 7777; //접속할 서버 포트
 
     public static void main(String args[]) {
-        new UserInterface();
+        UserInterface.getInstance();
         /*try{
             Socket socket=new Socket(SERVER_IP,SERVER_PORT);
             System.out.println("서버접속성공!");
