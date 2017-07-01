@@ -6,6 +6,8 @@ import java.io.File;
 
 public class UserInterface extends JFrame {
 
+    static UserInterface userInterface=null;
+
     //그림판
     JPanel paintPanel;
     JPanel colorPanel;
@@ -25,6 +27,10 @@ public class UserInterface extends JFrame {
     JTextField chatInputField;
     JButton sendBtn;
 
+    public static UserInterface getInstance(){
+        if(userInterface==null) return new UserInterface();
+        return userInterface;
+    }
 
     public UserInterface() {
         paintCanvas = new PaintCanvas();

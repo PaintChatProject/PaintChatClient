@@ -10,7 +10,6 @@ public class PaintCanvas extends Canvas {
     public void paint(Graphics g) {
         g.setColor(c);
         g.fillOval(x, y, size, size);
-
     }
 
     public int getSiz() {
