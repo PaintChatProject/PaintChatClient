@@ -1,5 +1,5 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -15,10 +15,14 @@ public class UserInterface extends JFrame {
     JButton[] colorBtn = new JButton[7];
     String[] colorBtnText = {"red", "orange", "yellow", "green", "blue", "pink"};
     Color[] color = {Color.red, Color.orange, Color.yellow, Color.green, Color.blue, Color.pink};
-    JButton eraser, clear, fillColor, fileChooser;
+    JButton eraser, clear, fillColor, image;
 
     PaintCanvas paintCanvas;
     JComboBox jcb;
+
+    // 이미지파일 불러오기
+    JFileChooser fileChooser;
+    JFrame imageFrame;
 
     //채팅
     JPanel chatPanel;
@@ -79,15 +83,58 @@ public class UserInterface extends JFrame {
         });
         colorPanel.add(fillColor);
 
-
-        fileChooser = new JButton("Image Load");
-        fileChooser.addActionListener(new ActionListener() {
+        image = new JButton("Image");
+        image.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                MyFrame my = new MyFrame();
+                fileChooser = new JFileChooser();
+                imageFrame = new JFrame();
+                javax.swing.filechooser.FileFilter imageFileFilter = NewFileFilter("Image Files", new String[] { "png", "jpg" });
+                fileChooser.addChoosableFileFilter(imageFileFilter);
+                fileChooser.setFileFilter(imageFileFilter);
+                int returnVal = fileChooser.showOpenDialog(imageFrame);
+                if (returnVal == JFileChooser.APPROVE_OPTION) { //열기 버튼을 누르면
+                    File file = fileChooser.getSelectedFile();
+                    Image img = null;
+                    try {
+                        img = ImageIO.read(file);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                    Graphics g = paintCanvas.getGraphics();
+                    g.drawImage(img, 0, 0, null);
+                }
+            }
+            // 파일 필터 (사진만 선택할 수 있도록)
+            private javax.swing.filechooser.FileFilter NewFileFilter(final String desc, final String[] allowed_extensions) {
+                return new javax.swing.filechooser.FileFilter() {
+                    @Override
+                    public boolean accept(java.io.File f) {
+                        if (f.isDirectory()) {
+                            return true;
+                        }
+                        int pos = f.getName().lastIndexOf('.');
+                        if (pos == -1) {
+                            return false;
+                        } else {
+                            String extension = f.getName().substring(pos + 1);
+                            for (String allowed_extension : allowed_extensions) {
+                                if (extension.equalsIgnoreCase(allowed_extension)) {
+                                    return true;
+                                }
+                            }
+                            return false;
+                        }
+                    }
+
+                    @Override
+                    public String getDescription() {
+                        return desc;
+                    }
+                };
             }
         });
-        colorPanel.add(fileChooser);
+        colorPanel.add(image);
 
         String[] str = {"10", "15", "20", "25", "30"};
         jcb = new JComboBox(str);
@@ -171,73 +218,4 @@ public class UserInterface extends JFrame {
         });
     }
 
-    class MyFrame implements ActionListener {
-        private JFrame frm = new JFrame();
-        private JFileChooser fileChooser = new JFileChooser();
-        private JPanel northPanel = new JPanel();
-        private JPanel centerPanel = new JPanel();
-        private JButton openBtn = new JButton();
-        private JButton saveBtn = new JButton();
-        private JLabel fileLabel = new JLabel();
-        private JTextField address = new JTextField();
-
-        public MyFrame() {
-            //기본 컴포넌트 설정
-            fileLabel.setText("파일 경로");
-            address.setColumns(30);
-            openBtn.setText("열기");
-            saveBtn.setText("저장");
-
-            //액션 리스너 장착
-            openBtn.addActionListener(this);
-            saveBtn.addActionListener(this);
-
-            //각 패널 설정 및 컴포넌트 장착
-            centerPanel.add(fileLabel);
-            centerPanel.add(address);
-            northPanel.setLayout(new GridLayout(0, 2));
-            northPanel.add(openBtn);
-            northPanel.add(saveBtn);
-
-            //프레임에 패널 장착
-            frm.add(northPanel, "North");
-            frm.add(centerPanel, "Center");
-
-            //기본 프래임 셋팅
-            frm.setTitle("JFileChooser 예제");
-            frm.setLocation(120, 120);
-            frm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frm.pack();
-            frm.setVisible(true);
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            if (e.getSource() == openBtn) {
-                int returnVal = fileChooser.showOpenDialog(frm);
-                if (returnVal == JFileChooser.APPROVE_OPTION) {
-                    //열기 버튼을 누르면
-                    File file = fileChooser.getSelectedFile();
-                    address.setText(file.toString() + "을 오픈합니다");
-                } else {
-                    //취소 버튼을 누르면
-                    address.setText("파일을 열지 못했습니다");
-                    System.out.println("취소합니다");
-                }
-            } else if (e.getSource() == saveBtn) {
-//                int returnVal = fileChooser.showSaveDialog(frm);
-//                if (returnVal == JFileChooser.APPROVE_OPTION) {
-                    //취소 버튼을 누르면
-                    File file = fileChooser.getSelectedFile();
-                    Toolkit toolkit = Toolkit.getDefaultToolkit();
-                    Image image = toolkit.getImage(String.valueOf(file));
-                    Graphics g = paintCanvas.getGraphics();
-                    g.drawImage(image, 0, 0,null);
-//                } else {
-                    //취소 버튼을 누르면
-//                    address.setText("파일을 저장하지 못했습니다");
-//                }
-            }
-        }
-    }
 }
