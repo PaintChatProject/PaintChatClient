@@ -1,12 +1,6 @@
 import java.io.ObjectInputStream;
 
 public class ReceiveData extends Thread {
-    private static ReceiveData receiveData=new ReceiveData();
-
-    public static ReceiveData getInstance(){
-        return receiveData;
-    }
-
     public void run(){
         try {
             if(!SocketData.getInstance().isConnected()){
