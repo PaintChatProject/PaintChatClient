@@ -44,7 +44,7 @@ public class UserInterface extends JFrame {
             colorBtn[i].addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    paintCanvas.setBackgroundColor(indexColor);
+                    paintCanvas.setC(indexColor);
                 }
             });
             colorBtn[i].setOpaque(true);
