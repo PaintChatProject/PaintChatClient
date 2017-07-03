@@ -6,7 +6,7 @@ import java.io.File;
 
 public class UserInterface extends JFrame {
 
-    static UserInterface userInterface=null;
+    static UserInterface userInterface=new UserInterface();
 
     //그림판
     JPanel paintPanel;
@@ -32,12 +32,11 @@ public class UserInterface extends JFrame {
     JButton sendBtn;
 
     public static UserInterface getInstance(){
-        if(userInterface==null) return new UserInterface();
         return userInterface;
     }
 
-    private UserInterface() {
-        paintCanvas = new PaintCanvas();
+    public void showUI() {
+        paintCanvas = PaintCanvas.getInstance();
         colorPanel = new JPanel(new FlowLayout());
         for (int i = 0; i < color.length; i++) {
             colorBtn[i] = new JButton(colorBtnText[i]);
@@ -45,8 +44,7 @@ public class UserInterface extends JFrame {
             colorBtn[i].addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    paintCanvas.setC(indexColor);
-                    fillColor.setBackground(indexColor);
+                    paintCanvas.setBackgroundColor(indexColor);
                 }
             });
             colorBtn[i].setOpaque(true);
@@ -101,8 +99,7 @@ public class UserInterface extends JFrame {
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
-                    Graphics g = paintCanvas.getGraphics();
-                    g.drawImage(img, 0, 0, null);
+                    PaintCanvas.getInstance().setBackgroundImage(img, 0, 0, null);
                 }
             }
             // 파일 필터 (사진만 선택할 수 있도록)
@@ -190,7 +187,8 @@ public class UserInterface extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (chatInputField.getText().length() > 0) {
-                    chatArea.append(chatInputField.getText() + "\n");
+                    ChatData chatData=new ChatData(chatInputField.getText());
+                    AddChat(chatData);
                     chatInputField.setText("");
                 }
             }
@@ -218,4 +216,8 @@ public class UserInterface extends JFrame {
         });
     }
 
+
+    public void AddChat(ChatData chatData){
+        chatArea.append("["+chatData.getName()+"] "+chatData.getMessage()+"\n");
+    }
 }

@@ -1,10 +1,17 @@
 import java.awt.*;
+import java.awt.image.ImageObserver;
 
 public class PaintCanvas extends Canvas {
+    private static PaintCanvas paintCanvas=new PaintCanvas();
+
     private int x = -30;
     private int y = -30;
     Color c = Color.green;
     int size = 20;
+
+    public static PaintCanvas getInstance(){
+        return paintCanvas;
+    }
 
     @Override
     public void paint(Graphics g) {
@@ -63,7 +70,8 @@ public class PaintCanvas extends Canvas {
         g.fillRect(0, 0, getWidth(), getHeight());
     }
 
-    public void setBackgroundImage(String path){
-
+    public void setBackgroundImage(Image image, int x, int y, ImageObserver imageObserver){
+        Graphics g = paintCanvas.getGraphics();
+        g.drawImage(image, x, y, imageObserver);
     }
 }
