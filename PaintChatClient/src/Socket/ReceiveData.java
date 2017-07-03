@@ -1,3 +1,4 @@
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 
 public class ReceiveData extends Thread {
@@ -7,9 +8,10 @@ public class ReceiveData extends Thread {
                 System.out.println("\u001B[1m"+"\u001B[31m" + "[Error] 서버가 연결되어있지않습니다." + "\u001B[0m");
                 return;
             }
-            ObjectInputStream objectInputStream=new ObjectInputStream(SocketData.getInstance().getSocket().getInputStream());
 
+            InputStream inputStream = SocketData.getInstance().getSocket().getInputStream();
             while(true){
+                ObjectInputStream objectInputStream=new ObjectInputStream(inputStream);
                 Object object=objectInputStream.readObject();   //입력스트림으로 부터 데이터 수신
 
                 // instanceof 연산자를 이용하여 데이터 구분 후 처리
@@ -21,7 +23,9 @@ public class ReceiveData extends Thread {
                     ChatData chatData=(ChatData)object;
                     UpdateChat(chatData);
                 }
+                else break;
             }
+            inputStream.close();
         }catch (Exception e) {
             e.printStackTrace();
         }

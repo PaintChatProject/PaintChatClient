@@ -185,6 +185,7 @@ public class UserInterface extends JFrame {
         });
         sendBtn = new JButton("Send");
         sendData=SendData.getInstance();
+        sendData.setOutputStream(SocketData.getInstance().getSocket());
         sendBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
