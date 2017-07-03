@@ -30,6 +30,7 @@ public class UserInterface extends JFrame {
     JTextArea chatArea;
     JTextField chatInputField;
     JButton sendBtn;
+    SendData sendData;
 
     public static UserInterface getInstance(){
         return userInterface;
@@ -183,6 +184,7 @@ public class UserInterface extends JFrame {
             }
         });
         sendBtn = new JButton("Send");
+        sendData=SendData.getInstance();
         sendBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -190,6 +192,7 @@ public class UserInterface extends JFrame {
                     ChatData chatData=new ChatData(chatInputField.getText());
                     AddChat(chatData);
                     chatInputField.setText("");
+                    sendData.sendChatData(chatData);
                 }
             }
         });
@@ -212,6 +215,7 @@ public class UserInterface extends JFrame {
             public void mouseDragged(MouseEvent e) {
                 PaintData paintData=new PaintData(e.getX() - paintCanvas.getSiz() / 2,e.getY() - paintCanvas.getSiz() / 2,paintCanvas.getC(),paintCanvas.getSiz());
                 paintCanvas.addPaint(paintData);
+                sendData.sendPaintData(paintData);
             }
         });
     }
