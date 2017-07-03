@@ -1,5 +1,7 @@
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 
 public class SocketData {
@@ -12,8 +14,6 @@ public class SocketData {
     private int SERVER_PORT;
 
     private Socket socket=null;
-    private ObjectInputStream objectInputStream;
-    private ObjectOutputStream objectOutputStream;
 
     public static SocketData getInstance(){
         return socketData;
@@ -24,9 +24,6 @@ public class SocketData {
             socket=new Socket(DEFAULT_SERVER_IP,DEFAULT_SERVER_PORT);
             SERVER_IP=DEFAULT_SERVER_IP;
             SERVER_PORT=DEFAULT_SERVER_PORT;
-
-            objectInputStream=new ObjectInputStream(socket.getInputStream());
-            objectOutputStream=new ObjectOutputStream(socket.getOutputStream());
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -59,13 +56,5 @@ public class SocketData {
 
     public Socket getSocket(){
         return socket;
-    }
-
-    public ObjectInputStream getObjectInputStream(){
-        return objectInputStream;
-    }
-
-    public ObjectOutputStream getObjectOutputStream(){
-        return objectOutputStream;
     }
 }

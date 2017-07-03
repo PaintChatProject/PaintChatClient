@@ -1,8 +1,8 @@
 import java.io.Serializable;
 
 public class ChatData implements Serializable {
-    private String name;
-    private String message;
+    String name;
+    String message;
 
     public ChatData(String message){
         this.name="익명";

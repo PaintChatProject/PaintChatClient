@@ -7,7 +7,7 @@ public class ReceiveData extends Thread {
                 System.out.println("\u001B[1m"+"\u001B[31m" + "[Error] 서버가 연결되어있지않습니다." + "\u001B[0m");
                 return;
             }
-            ObjectInputStream objectInputStream=SocketData.getInstance().getObjectInputStream();
+            ObjectInputStream objectInputStream=new ObjectInputStream(SocketData.getInstance().getSocket().getInputStream());
 
             while(true){
                 Object object=objectInputStream.readObject();   //입력스트림으로 부터 데이터 수신
