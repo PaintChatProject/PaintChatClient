@@ -206,7 +206,7 @@ public class UserInterface extends JFrame {
         add(paintPanel, BorderLayout.WEST);
         add(chatPanel, BorderLayout.EAST);
 
-        setBounds(100, 100, 1200, 600);
+        setBounds(100, 100, 1600, 600);
         setResizable(true);
         setVisible(true);
 

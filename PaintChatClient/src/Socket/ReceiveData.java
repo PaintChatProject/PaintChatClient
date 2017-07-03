@@ -18,7 +18,8 @@ public class ReceiveData extends Thread {
                     UpdatePaint(paintData);
                 }
                 else if(object instanceof ChatData){
-                    ChatData textData=(ChatData)object;
+                    ChatData chatData=(ChatData)object;
+                    UpdateChat(chatData);
                 }
             }
         }catch (Exception e) {
