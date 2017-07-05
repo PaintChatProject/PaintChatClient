@@ -66,8 +66,10 @@ public class UserInterface extends JFrame {
         clear.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Graphics g = paintCanvas.getGraphics();
-                g.clearRect(0, 0, paintCanvas.getWidth(), paintCanvas.getHeight());
+//                Graphics g = paintCanvas.getGraphics();
+//                g.clearRect(0, 0, paintCanvas.getWidth(), paintCanvas.getHeight());
+                PaintData paintData = new PaintData(-10, -10, paintCanvas.getBackground(), -10);
+                sendData.sendPaintData(paintData);
             }
         });
         colorPanel.add(clear);
@@ -77,7 +79,9 @@ public class UserInterface extends JFrame {
         fillColor.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                paintCanvas.setBackgroundColor(paintCanvas.getC());
+//                paintCanvas.setBackgroundColor(paintCanvas.getC());
+                PaintData paintData = new PaintData(-10, -10, paintCanvas.getC(), -10);
+                sendData.sendPaintData(paintData);
             }
         });
         colorPanel.add(fillColor);

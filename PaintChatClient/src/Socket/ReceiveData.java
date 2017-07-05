@@ -17,7 +17,13 @@ public class ReceiveData extends Thread {
                 // instanceof 연산자를 이용하여 데이터 구분 후 처리
                 if(object instanceof PaintData){
                     PaintData paintData=(PaintData)object;
-                    UpdatePaint(paintData);
+
+                    if (paintData.getSize() == -10) {
+                        PaintCanvas paintCanvas = PaintCanvas.getInstance();
+                        paintCanvas.setBackgroundColor(paintData.getColor());
+                    } else if (paintData.getSize() > 0) {
+                        UpdatePaint(paintData);
+                    }
                 }
                 else if(object instanceof ChatData){
                     ChatData chatData=(ChatData)object;
