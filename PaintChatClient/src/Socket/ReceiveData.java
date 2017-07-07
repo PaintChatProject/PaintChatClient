@@ -1,3 +1,5 @@
+import javax.swing.*;
+import java.awt.*;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 
@@ -19,29 +21,21 @@ public class ReceiveData extends Thread {
                     PaintData paintData=(PaintData)object;
 
                     if (paintData.getSize() == -10) {
-                        PaintCanvas paintCanvas = PaintCanvas.getInstance();
-                        paintCanvas.setBackgroundColor(paintData.getColor());
+                        PaintCanvas.getInstance().clearBackground();
                     } else if (paintData.getSize() > 0) {
-                        UpdatePaint(paintData);
+                        PaintCanvas.getInstance().addPaint(paintData);
                     }
                 }
                 else if(object instanceof ChatData){
-                    ChatData chatData=(ChatData)object;
-                    UpdateChat(chatData);
+                    UserInterface.getInstance().AddChat((ChatData)object);
                 }
-                else break;
+                else if(object instanceof ImageIcon){
+                    PaintCanvas.getInstance().setBackgroundImage(((ImageIcon)object).getImage(),0,0,null);
+                }
             }
-            inputStream.close();
+            //inputStream.close();
         }catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private void UpdatePaint(PaintData paintData){
-        PaintCanvas.getInstance().addPaint(paintData);
-    }
-
-    private void UpdateChat(ChatData chatData){
-        UserInterface.getInstance().AddChat(chatData);
     }
 }

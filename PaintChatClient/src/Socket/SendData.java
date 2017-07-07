@@ -1,3 +1,5 @@
+import javax.swing.*;
+import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -34,6 +36,15 @@ public class SendData {
     public void sendPaintData(PaintData paintData){
         try {
             objectOutputStream.writeObject(paintData);  // ChatData Object 전송
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendImageData(ImageIcon image){
+        try {
+            objectOutputStream.reset();
+            objectOutputStream.writeObject(image);  // ChatData Object 전송
         } catch (IOException e) {
             e.printStackTrace();
         }

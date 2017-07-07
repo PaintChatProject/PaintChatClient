@@ -3,6 +3,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.io.ObjectOutputStream;
 
 public class UserInterface extends JFrame {
 
@@ -28,6 +29,7 @@ public class UserInterface extends JFrame {
     JPanel chatPanel;
     JPanel chatInputPanel;
     JTextArea chatArea;
+    JTextField chatNameField;
     JTextField chatInputField;
     JButton sendBtn;
     SendData sendData;
@@ -45,7 +47,6 @@ public class UserInterface extends JFrame {
             colorBtn[i].addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    paintCanvas.setC(indexColor);
                 }
             });
             colorBtn[i].setOpaque(true);
@@ -57,7 +58,7 @@ public class UserInterface extends JFrame {
         eraser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                paintCanvas.setC(paintCanvas.getBackground());
+
             }
         });
         colorPanel.add(eraser);
@@ -66,10 +67,8 @@ public class UserInterface extends JFrame {
         clear.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                Graphics g = paintCanvas.getGraphics();
-//                g.clearRect(0, 0, paintCanvas.getWidth(), paintCanvas.getHeight());
-                PaintData paintData = new PaintData(-10, -10, paintCanvas.getBackground(), -10);
-                sendData.sendPaintData(paintData);
+                //paintCanvas.clearBackground();
+                sendData.sendPaintData(new PaintData(-10, -10, -10));
             }
         });
         colorPanel.add(clear);
@@ -79,9 +78,8 @@ public class UserInterface extends JFrame {
         fillColor.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                paintCanvas.setBackgroundColor(paintCanvas.getC());
-                PaintData paintData = new PaintData(-10, -10, paintCanvas.getC(), -10);
-                sendData.sendPaintData(paintData);
+                //paintCanvas.clearBackground();
+                sendData.sendPaintData(new PaintData(-10, -10, -10));
             }
         });
         colorPanel.add(fillColor);
@@ -98,13 +96,14 @@ public class UserInterface extends JFrame {
                 int returnVal = fileChooser.showOpenDialog(imageFrame);
                 if (returnVal == JFileChooser.APPROVE_OPTION) { //열기 버튼을 누르면
                     File file = fileChooser.getSelectedFile();
-                    Image img = null;
+                    ImageIcon imageIcon = null;
                     try {
-                        img = ImageIO.read(file);
+                        imageIcon=new ImageIcon(ImageIO.read(file));
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
-                    PaintCanvas.getInstance().setBackgroundImage(img, 0, 0, null);
+                    //PaintCanvas.getInstance().setBackgroundImage(img, 0, 0, null);
+                    sendData.sendImageData(imageIcon);
                 }
             }
             // 파일 필터 (사진만 선택할 수 있도록)
@@ -144,8 +143,6 @@ public class UserInterface extends JFrame {
         jcb.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String s = (String) jcb.getSelectedItem();
-                paintCanvas.setSize(Integer.parseInt(s));
             }
         });
         jcb.setSelectedItem(str[0]);
@@ -168,6 +165,7 @@ public class UserInterface extends JFrame {
         qScroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);// 수평 스크롤바 표시 정책 : 항상 보여주기
 
         chatInputPanel = new JPanel(new FlowLayout());
+        chatNameField= new JTextField(10);
         chatInputField = new JTextField(20);
         chatInputField.addKeyListener(new KeyListener() {
             @Override
@@ -194,8 +192,10 @@ public class UserInterface extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (chatInputField.getText().length() > 0) {
-                    ChatData chatData=new ChatData(chatInputField.getText());
-                    AddChat(chatData);
+                    String chatName=chatNameField.getText();
+                    String chatInput=chatInputField.getText();
+                    ChatData chatData=(chatName.length()==0)?new ChatData(chatInput):new ChatData(chatName,chatInput);
+                    //AddChat(chatData);
                     chatInputField.setText("");
                     sendData.sendChatData(chatData);
                 }
@@ -204,6 +204,7 @@ public class UserInterface extends JFrame {
         chatPanel.add(qScroller, BorderLayout.CENTER);
         chatPanel.add(chatInputPanel, BorderLayout.SOUTH);
 
+        chatInputPanel.add(chatNameField);
         chatInputPanel.add(chatInputField);
         chatInputPanel.add(sendBtn);
 
@@ -215,11 +216,21 @@ public class UserInterface extends JFrame {
         setResizable(true);
         setVisible(true);
 
+        paintCanvas.addMouseMotionListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                PaintData paintData=new PaintData(e.getX() - 20 / 2,e.getY() - 20 / 2,20);
+                paintCanvas.addPaint(paintData);
+                sendData.sendPaintData(paintData);
+            }
+        });
+
         paintCanvas.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
-                PaintData paintData=new PaintData(e.getX() - paintCanvas.getSiz() / 2,e.getY() - paintCanvas.getSiz() / 2,paintCanvas.getC(),paintCanvas.getSiz());
-                paintCanvas.addPaint(paintData);
+                PaintData paintData=new PaintData(e.getX() - 20 / 2,e.getY() - 20 / 2,20);
+                //paintCanvas.addPaint(paintData);
                 sendData.sendPaintData(paintData);
             }
         });
